@@ -537,17 +537,19 @@ namespace PrimitierModdingFramework.Debugging
 			UpdateToggle(refName, state);
 		}
 
+		private float _buttonPercentHeight = 0.325f;
+		private float _labelPercentHeight = 0.25f;
 		/// <summary>
 		/// Create an up/down button with label, add those buttons and labels into the Widgets list so elements can be updated
 		/// Takes a Vector2 size, Vector2 location, buttontext and up/down Il2CppSystem.Actions
 		/// </summary>
-		public void CreateUpDownWidget(	string refName, string buttonText, string labelText,
+		public void CreateUpDownWidget(	string refName, string buttonText, string labelText, float textSize,
 										Vector2 groupSize,	Vector2 groupLocation,
 										Il2CppSystem.Action incPress, Il2CppSystem.Action decPress)
 		{
 			var incbutton = CreateButton(	new Vector2(groupSize.x, groupSize.y*_buttonPercentHeight),
 												new Vector2(groupLocation.x+0, groupLocation.y+0), 
-												buttonText+"\nINC", Color.grey, Color.black, 0.0f, refName+".INC");
+												buttonText+" INC", Color.grey, Color.black, 0.0f, refName+".INC");
 				incbutton.AttachOnPressListener(incPress);
 
 				var label = CreateLabel(	new Vector2(groupSize.x, groupSize.y*_labelPercentHeight),
@@ -556,37 +558,56 @@ namespace PrimitierModdingFramework.Debugging
 
 				var decbutton = CreateButton(	new Vector2(groupSize.x, groupSize.y*_buttonPercentHeight),
 												new Vector2(groupLocation.x+0, groupLocation.y+0), 
-												buttonText+"\nDEC", Color.grey, Color.black, 0.0f, refName+".DEC");
+												buttonText+" DEC", Color.grey, Color.black, 0.0f, refName+".DEC");
 				decbutton.AttachOnPressListener(decPress);
 		}
-
-		private float _buttonPercentHeight = 0.3f;
-		private float _labelPercentHeight = 0.2f;
-		public void CreateUpDownWidget(string refName, string buttonText, string labelText,
+		public void CreateUpDownWidget(string refName, string buttonText, string labelText, float textSize,
 								Il2CppSystem.Action incPress, Il2CppSystem.Action decPress)
 		{
 			float gapPercentHeight = (1-(_buttonPercentHeight*2+_labelPercentHeight))/2;
 
 			var incbutton = CreateButton(	new Vector2(_buttonWidth, _buttonHeight*_buttonPercentHeight),
-											new Vector2(_nextButtonPos.x-0.0f, _nextButtonPos.y-0.0f),
-											buttonText+"\nINC", Color.grey, Color.black, 0.0f, refName+".INC");
+											new Vector2(_nextButtonPos.x-0.0f, _nextButtonPos.y+(_buttonHeight*(_buttonPercentHeight))),
+											buttonText+" INC", Color.grey, Color.black, 0.0f, refName+".INC");
 			incbutton.AttachOnPressListener(incPress);
 
 			var label = CreateLabel(	new Vector2(_buttonWidth, _buttonHeight*_labelPercentHeight),
 										new Vector2(_nextButtonPos.x-0.0f, 
-										_nextButtonPos.y-(	_buttonHeight*(_buttonPercentHeight+gapPercentHeight)	)),
+										_nextButtonPos.y+0.0f/*(_buttonHeight*(gapPercentHeight))*/),
 										labelText, Color.grey, Color.black, 0.0f, refName+".LABEL");
 
 			var decbutton = CreateButton(	new Vector2(_buttonWidth, _buttonHeight*_buttonPercentHeight),
 											new Vector2(_nextButtonPos.x-0.0f, 
-											_nextButtonPos.y-(	_buttonHeight*(_buttonPercentHeight+(gapPercentHeight*2)+_labelPercentHeight)	)),
-											buttonText+"\nDEC", Color.grey, Color.black, 0.0f, refName+".DEC");
+											_nextButtonPos.y-(_buttonHeight*_buttonPercentHeight)	),
+											buttonText+" DEC", Color.grey, Color.black, 0.0f, refName+".DEC");
 			decbutton.AttachOnPressListener(decPress);
 			AdvanceButtonPosition();
 		}
 
 		private float _buttonPercentWidth = 0.3f;
 		private float _labelPercentWidth = 0.3f;
+		public void CreateLRUpDownWidget(string refName, string buttonText, string labelText, float textSize,
+								Vector2 groupSize,	Vector2 groupLocation,
+								Il2CppSystem.Action incPress, Il2CppSystem.Action decPress)
+		{
+			float gapPercentWidth = (1-(_buttonPercentWidth*2+_labelPercentWidth))/2;
+
+			var incbutton = CreateButton(	new Vector2(groupSize.x*_buttonPercentWidth, groupSize.y),
+											new Vector2(groupLocation.x-(groupSize.x*(_buttonPercentWidth+gapPercentWidth)), groupLocation.y+0.0f),
+											buttonText+"\nINC", Color.grey, Color.black, textSize, refName+".INC");
+			incbutton.AttachOnPressListener(incPress);
+
+			var label = CreateLabel(	new Vector2(groupSize.x*_labelPercentWidth, groupSize.y),
+										new Vector2(groupLocation.x+0.0f, groupLocation.y+0.0f),
+										labelText, Color.grey, Color.black, textSize, refName+".LABEL");
+
+			var decbutton = CreateButton(	new Vector2(groupSize.x*_buttonPercentWidth, groupSize.y),
+											new Vector2(groupLocation.x+(	groupSize.x*(gapPercentWidth+_labelPercentWidth)	), 
+											groupLocation.y+0.0f),
+											buttonText+"\nDEC", Color.grey, Color.black, textSize, refName+".DEC");
+			decbutton.AttachOnPressListener(decPress);
+			AdvanceButtonPosition();
+		}
 		public void CreateLRUpDownWidget(string refName, string buttonText, string labelText, float textSize,
 								Il2CppSystem.Action incPress, Il2CppSystem.Action decPress)
 		{

@@ -142,7 +142,7 @@ namespace DemoMod
 				newmenu.SetLabelWidgetText("xcubecounter.LABEL",creativeBlockSize.x.ToString("0.000"));
 			}));
 
-			newmenu.CreateLRUpDownWidget("ycubecounter", "Y", creativeBlockSize.y.ToString("0.000"), 0.11f,
+			newmenu.CreateUpDownWidget("ycubecounter", "Y", creativeBlockSize.y.ToString("0.000"), 0.11f,
 			new System.Action(() =>{
 				creativeBlockSize.y += creativeBlockSizeIncDec;
 				newmenu.SetLabelWidgetText("ycubecounter.LABEL",creativeBlockSize.y.ToString("0.000"));
@@ -177,6 +177,9 @@ namespace DemoMod
 				{ creativeBlockSizeIncDec = creativeBlockSizeIncDec*0.1f; }
 				newmenu.SetLabelWidgetText("creativecubesize.LABEL",creativeBlockSizeIncDec.ToString("0.000"));
 			}));
+			newmenu.CreateUpDownWidget("xyztext", "TEST", "Test", 0.09f,
+			new System.Action(() =>{}),
+			new System.Action(() =>{}));
 
 			newmenu.CreateButton("Leaf", new System.Action(() =>
 			{
