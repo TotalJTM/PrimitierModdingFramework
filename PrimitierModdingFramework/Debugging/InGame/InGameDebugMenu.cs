@@ -7,7 +7,7 @@ namespace PrimitierModdingFramework.Debugging
 {
 	public class InGameDebugMenu : MonoBehaviour
 	{
-		public InGameDebugMenu(System.IntPtr ptr) : base(ptr) { }
+		public InGameDebugMenu(System.IntPtr ptr) : base(ptr) {}
 
 		private const float _buttonHeight = 0.05f;
 		private const float _buttonWidth = 0.1f;
@@ -18,6 +18,14 @@ namespace PrimitierModdingFramework.Debugging
 
 		private int _buttonsOnCurrentLine = 0;
 		private Vector2 _nextButtonPos = new Vector2(-0.1f, 0.05f);
+		/// <summary>
+		/// Get and set the default button positon, is +x:up, +y:right, +z:away-from-you
+		/// </summary>
+		public Vector2 DefaultButtonPos
+		{
+			get { return _nextButtonPos; }
+			set { _nextButtonPos = value; }
+		}
 
 		/// Vars to store Widget class objects and active type of widgets
 		private List<Widget> activeWidgets = new List<Widget>();
@@ -206,17 +214,17 @@ namespace PrimitierModdingFramework.Debugging
 			//override textSize if 0.0 value. Indicates text size should be calculated based on string length
 			if(textSize.Equals(0.0f))
 			{
-				int offset = 3;
-				float maxTextSize = 0.3f;
-				if(text.Length > offset)
-				{ textSize = (maxTextSize / ((float)(text.Length-offset))); }
-				else
-				{ textSize = maxTextSize; }
-				
-				/* if(text.Length > 5)
-				{ textSize = 0.2f;}
+				// int offset = 3;
+				// float maxTextSize = 0.3f;
+				// if(text.Length > offset)
+				// { textSize = (maxTextSize / ((float)(text.Length-offset))); }
+				// else
+				// { textSize = maxTextSize; }
+
+				if(text.Length > 5)
+				{ textSize = 0.175f;}
 				else if(text.Length > 7)
-				{ textSize = 0.15f;}
+				{ textSize = 0.125f;}
 				else if(text.Length > 10)
 				{ textSize = 0.1f;}
 				else if(text.Length > 15)
@@ -224,7 +232,8 @@ namespace PrimitierModdingFramework.Debugging
 				else if(text.Length > 20)
 				{ textSize = 0.05f;}
 				else
-				{textSize = 0.3f;} */
+				{textSize = 0.2f;}
+				
 			}
 			
 			var textObj = parentObj.AddComponent<TextMeshPro>();
@@ -465,11 +474,11 @@ namespace PrimitierModdingFramework.Debugging
 			Widget w = GetWidget(refName);
 			if(w != null)
 			{
-				PMFLog.Message(w);
+				//PMFLog.Message(w);
 				w.ToggleUpdate(state);
-				PMFLog.Message("State written to");
+				//PMFLog.Message("State written to");
 			}
-			PMFLog.Message("No Toggle for "+refName+" found");
+			//PMFLog.Message("No Toggle for "+refName+" found");
 		}
 
 		//// Disabled until function added to destroy button object from menu
@@ -528,5 +537,76 @@ namespace PrimitierModdingFramework.Debugging
 			UpdateToggle(refName, state);
 		}
 
+		/// <summary>
+		/// Create an up/down button with label, add those buttons and labels into the Widgets list so elements can be updated
+		/// Takes a Vector2 size, Vector2 location, buttontext and up/down Il2CppSystem.Actions
+		/// </summary>
+		public void CreateUpDownWidget(	string refName, string buttonText, string labelText,
+										Vector2 groupSize,	Vector2 groupLocation,
+										Il2CppSystem.Action incPress, Il2CppSystem.Action decPress)
+		{
+			var incbutton = CreateButton(	new Vector2(groupSize.x, groupSize.y*_buttonPercentHeight),
+												new Vector2(groupLocation.x+0, groupLocation.y+0), 
+												buttonText+"\nINC", Color.grey, Color.black, 0.0f, refName+".INC");
+				incbutton.AttachOnPressListener(incPress);
+
+				var label = CreateLabel(	new Vector2(groupSize.x, groupSize.y*_labelPercentHeight),
+											new Vector2(groupLocation.x+0, groupLocation.y+0), 
+											labelText, Color.grey, Color.black, 0.0f, refName+".LABEL");
+
+				var decbutton = CreateButton(	new Vector2(groupSize.x, groupSize.y*_buttonPercentHeight),
+												new Vector2(groupLocation.x+0, groupLocation.y+0), 
+												buttonText+"\nDEC", Color.grey, Color.black, 0.0f, refName+".DEC");
+				decbutton.AttachOnPressListener(decPress);
+		}
+
+		private float _buttonPercentHeight = 0.3f;
+		private float _labelPercentHeight = 0.2f;
+		public void CreateUpDownWidget(string refName, string buttonText, string labelText,
+								Il2CppSystem.Action incPress, Il2CppSystem.Action decPress)
+		{
+			float gapPercentHeight = (1-(_buttonPercentHeight*2+_labelPercentHeight))/2;
+
+			var incbutton = CreateButton(	new Vector2(_buttonWidth, _buttonHeight*_buttonPercentHeight),
+											new Vector2(_nextButtonPos.x-0.0f, _nextButtonPos.y-0.0f),
+											buttonText+"\nINC", Color.grey, Color.black, 0.0f, refName+".INC");
+			incbutton.AttachOnPressListener(incPress);
+
+			var label = CreateLabel(	new Vector2(_buttonWidth, _buttonHeight*_labelPercentHeight),
+										new Vector2(_nextButtonPos.x-0.0f, 
+										_nextButtonPos.y-(	_buttonHeight*(_buttonPercentHeight+gapPercentHeight)	)),
+										labelText, Color.grey, Color.black, 0.0f, refName+".LABEL");
+
+			var decbutton = CreateButton(	new Vector2(_buttonWidth, _buttonHeight*_buttonPercentHeight),
+											new Vector2(_nextButtonPos.x-0.0f, 
+											_nextButtonPos.y-(	_buttonHeight*(_buttonPercentHeight+(gapPercentHeight*2)+_labelPercentHeight)	)),
+											buttonText+"\nDEC", Color.grey, Color.black, 0.0f, refName+".DEC");
+			decbutton.AttachOnPressListener(decPress);
+			AdvanceButtonPosition();
+		}
+
+		private float _buttonPercentWidth = 0.3f;
+		private float _labelPercentWidth = 0.3f;
+		public void CreateLRUpDownWidget(string refName, string buttonText, string labelText, float textSize,
+								Il2CppSystem.Action incPress, Il2CppSystem.Action decPress)
+		{
+			float gapPercentWidth = (1-(_buttonPercentWidth*2+_labelPercentWidth))/2;
+
+			var incbutton = CreateButton(	new Vector2(_buttonWidth*_buttonPercentWidth, _buttonHeight),
+											new Vector2(_nextButtonPos.x-(_buttonWidth*(_buttonPercentWidth+gapPercentWidth)), _nextButtonPos.y+0.0f),
+											buttonText+"\nINC", Color.grey, Color.black, textSize, refName+".INC");
+			incbutton.AttachOnPressListener(incPress);
+
+			var label = CreateLabel(	new Vector2(_buttonWidth*_labelPercentWidth, _buttonHeight),
+										new Vector2(_nextButtonPos.x+0.0f, _nextButtonPos.y+0.0f),
+										labelText, Color.grey, Color.black, textSize, refName+".LABEL");
+
+			var decbutton = CreateButton(	new Vector2(_buttonWidth*_buttonPercentWidth, _buttonHeight),
+											new Vector2(_nextButtonPos.x+(	_buttonWidth*(gapPercentWidth+_labelPercentWidth)	), 
+											_nextButtonPos.y+0.0f),
+											buttonText+"\nDEC", Color.grey, Color.black, textSize, refName+".DEC");
+			decbutton.AttachOnPressListener(decPress);
+			AdvanceButtonPosition();
+		}
 	}
 }

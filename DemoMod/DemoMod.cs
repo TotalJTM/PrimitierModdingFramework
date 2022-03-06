@@ -15,8 +15,7 @@ namespace DemoMod
 		Vector3 creativeBlockSize = new Vector3(0.25f,0.25f,0.25f);
 		float upperBlockSizeLim = 2f;
 		float lowerBlockSizeLim = 0.05f;
-		float creativeBlockSizeInc = 0.05f;
-		float creativeBlockSizeDec = 0.05f;
+		float creativeBlockSizeIncDec = 0.1f;
 		Vector3 creativeBlockGenerationOffset = new Vector3(.75f, 0.0f, -0.75f);
 
 		DateTime sysTime;// = new DateTime();
@@ -80,58 +79,103 @@ namespace DemoMod
 		public InGameDebugMenu CreateCreativeBlockBuilderMenu(){
 			var newmenu = InGameDebugTool.CreateMenu("BlockuilderMenu", "CreativeMenu");
 			//Increment Buttons
-			newmenu.CreateButton("IncX", new System.Action(() =>
-			{
-				if(creativeBlockSize.x+creativeBlockSizeInc < upperBlockSizeLim){
-					creativeBlockSize.x += creativeBlockSizeInc;
-					newmenu.SetLabelWidgetText("Xcounter",creativeBlockSize.x.ToString("0.00"));
-				}
-				UpdateLastRecordedButtonPress();
+			// newmenu.CreateButton("IncX", new System.Action(() =>
+			// {
+			// 	if(creativeBlockSize.x+creativeBlockSizeInc < upperBlockSizeLim){
+			// 		creativeBlockSize.x += creativeBlockSizeInc;
+			// 		newmenu.SetLabelWidgetText("Xcounter",creativeBlockSize.x.ToString("0.00"));
+			// 	}
+			// 	UpdateLastRecordedButtonPress();
+			// }));
+			// newmenu.CreateButton("IncY", new System.Action(() =>
+			// {
+			// 	if(creativeBlockSize.y+creativeBlockSizeInc < upperBlockSizeLim){
+			// 		creativeBlockSize.y += creativeBlockSizeInc;
+			// 		newmenu.SetLabelWidgetText("Ycounter",creativeBlockSize.y.ToString("0.00"));
+			// 	}
+			// 	UpdateLastRecordedButtonPress();
+			// }));
+			// newmenu.CreateButton("IncZ", new System.Action(() =>
+			// {
+			// 	if(creativeBlockSize.z+creativeBlockSizeInc < upperBlockSizeLim){
+			// 		creativeBlockSize.z += creativeBlockSizeInc;
+			// 		newmenu.SetLabelWidgetText("Zcounter",creativeBlockSize.z.ToString("0.00"));
+			// 	}
+			// 	UpdateLastRecordedButtonPress();
+			// }));
+			// //Label Widgets
+			// newmenu.CreateLabelWidget("Xcounter", creativeBlockSize.x.ToString("0.00"));
+			// newmenu.CreateLabelWidget("Ycounter", creativeBlockSize.y.ToString("0.00"));
+			// newmenu.CreateLabelWidget("Zcounter", creativeBlockSize.z.ToString("0.00"));
+			// //Decrement Buttons
+			// newmenu.CreateButton("DecX", new System.Action(() =>
+			// {
+			// 	if(creativeBlockSize.x-creativeBlockSizeDec > lowerBlockSizeLim){
+			// 		creativeBlockSize.x -= creativeBlockSizeDec;
+			// 		newmenu.SetLabelWidgetText("Xcounter",creativeBlockSize.x.ToString("0.00"));
+			// 	}
+			// 	UpdateLastRecordedButtonPress();
+			// }));
+			// newmenu.CreateButton("DecY", new System.Action(() =>
+			// {
+			// 	if(creativeBlockSize.y-creativeBlockSizeDec > lowerBlockSizeLim){
+			// 		creativeBlockSize.y -= creativeBlockSizeDec;
+			// 		newmenu.SetLabelWidgetText("Ycounter",creativeBlockSize.y.ToString("0.00"));
+			// 	}
+			// 	UpdateLastRecordedButtonPress();
+			// }));
+			// newmenu.CreateButton("DecZ", new System.Action(() =>
+			// {
+			// 	if(creativeBlockSize.z-creativeBlockSizeDec > lowerBlockSizeLim){
+			// 		creativeBlockSize.z -= creativeBlockSizeDec;
+			// 		newmenu.SetLabelWidgetText("Zcounter",creativeBlockSize.z.ToString("0.00"));
+			// 	}
+			// 	UpdateLastRecordedButtonPress();
+			// }));
+			newmenu.CreateLRUpDownWidget("xcubecounter", "X", creativeBlockSize.x.ToString("0.000"), 0.11f,
+			new System.Action(() =>{
+				creativeBlockSize.x += creativeBlockSizeIncDec;
+				newmenu.SetLabelWidgetText("xcubecounter.LABEL",creativeBlockSize.x.ToString("0.000"));
+			}),
+			new System.Action(() =>{
+				creativeBlockSize.x -= creativeBlockSizeIncDec;
+				newmenu.SetLabelWidgetText("xcubecounter.LABEL",creativeBlockSize.x.ToString("0.000"));
 			}));
-			newmenu.CreateButton("IncY", new System.Action(() =>
-			{
-				if(creativeBlockSize.y+creativeBlockSizeInc < upperBlockSizeLim){
-					creativeBlockSize.y += creativeBlockSizeInc;
-					newmenu.SetLabelWidgetText("Ycounter",creativeBlockSize.y.ToString("0.00"));
-				}
-				UpdateLastRecordedButtonPress();
+
+			newmenu.CreateLRUpDownWidget("ycubecounter", "Y", creativeBlockSize.y.ToString("0.000"), 0.11f,
+			new System.Action(() =>{
+				creativeBlockSize.y += creativeBlockSizeIncDec;
+				newmenu.SetLabelWidgetText("ycubecounter.LABEL",creativeBlockSize.y.ToString("0.000"));
+			}),
+			new System.Action(() =>{
+				creativeBlockSize.y -= creativeBlockSizeIncDec;
+				newmenu.SetLabelWidgetText("ycubecounter.LABEL",creativeBlockSize.y.ToString("0.000"));
 			}));
-			newmenu.CreateButton("IncZ", new System.Action(() =>
-			{
-				if(creativeBlockSize.z+creativeBlockSizeInc < upperBlockSizeLim){
-					creativeBlockSize.z += creativeBlockSizeInc;
-					newmenu.SetLabelWidgetText("Zcounter",creativeBlockSize.z.ToString("0.00"));
-				}
-				UpdateLastRecordedButtonPress();
+
+			newmenu.CreateLRUpDownWidget("zcubecounter", "Z", creativeBlockSize.z.ToString("0.000"), 0.11f,
+			new System.Action(() =>{
+				creativeBlockSize.z += creativeBlockSizeIncDec;
+				newmenu.SetLabelWidgetText("zcubecounter.LABEL",creativeBlockSize.z.ToString("0.000"));
+			}),
+			new System.Action(() =>{
+				creativeBlockSize.z -= creativeBlockSizeIncDec;
+				newmenu.SetLabelWidgetText("zcubecounter.LABEL",creativeBlockSize.z.ToString("0.000"));
 			}));
-			//Label Widgets
-			newmenu.CreateLabelWidget("Xcounter", creativeBlockSize.x.ToString("0.00"));
-			newmenu.CreateLabelWidget("Ycounter", creativeBlockSize.y.ToString("0.00"));
-			newmenu.CreateLabelWidget("Zcounter", creativeBlockSize.z.ToString("0.00"));
-			//Decrement Buttons
-			newmenu.CreateButton("DecX", new System.Action(() =>
-			{
-				if(creativeBlockSize.x-creativeBlockSizeDec > lowerBlockSizeLim){
-					creativeBlockSize.x -= creativeBlockSizeDec;
-					newmenu.SetLabelWidgetText("Xcounter",creativeBlockSize.x.ToString("0.00"));
-				}
-				UpdateLastRecordedButtonPress();
-			}));
-			newmenu.CreateButton("DecY", new System.Action(() =>
-			{
-				if(creativeBlockSize.y-creativeBlockSizeDec > lowerBlockSizeLim){
-					creativeBlockSize.y -= creativeBlockSizeDec;
-					newmenu.SetLabelWidgetText("Ycounter",creativeBlockSize.y.ToString("0.00"));
-				}
-				UpdateLastRecordedButtonPress();
-			}));
-			newmenu.CreateButton("DecZ", new System.Action(() =>
-			{
-				if(creativeBlockSize.z-creativeBlockSizeDec > lowerBlockSizeLim){
-					creativeBlockSize.z -= creativeBlockSizeDec;
-					newmenu.SetLabelWidgetText("Zcounter",creativeBlockSize.z.ToString("0.00"));
-				}
-				UpdateLastRecordedButtonPress();
+
+			newmenu.CreateLRUpDownWidget("creativecubesize", "SizeVal", creativeBlockSizeIncDec.ToString("0.000"), 0.09f,
+			new System.Action(() =>{
+				if(creativeBlockSizeIncDec/0.1f > 1.0f)
+				{ creativeBlockSizeIncDec = 1.0f; }
+				else
+				{ creativeBlockSizeIncDec = creativeBlockSizeIncDec/0.1f; }
+				newmenu.SetLabelWidgetText("creativecubesize.LABEL",creativeBlockSizeIncDec.ToString("0.000"));
+			}),
+			new System.Action(() =>{
+				if(creativeBlockSizeIncDec*0.1f < 0.001f)
+				{ creativeBlockSizeIncDec = 0.001f; }
+				else
+				{ creativeBlockSizeIncDec = creativeBlockSizeIncDec*0.1f; }
+				newmenu.SetLabelWidgetText("creativecubesize.LABEL",creativeBlockSizeIncDec.ToString("0.000"));
 			}));
 
 			newmenu.CreateButton("Leaf", new System.Action(() =>
