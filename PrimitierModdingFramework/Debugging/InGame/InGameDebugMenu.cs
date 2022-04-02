@@ -9,12 +9,30 @@ namespace PrimitierModdingFramework.Debugging
 	{
 		public InGameDebugMenu(System.IntPtr ptr) : base(ptr) {}
 
-		private const float _buttonHeight = 0.05f;
-		private const float _buttonWidth = 0.1f;
+		private float _buttonHeight = 0.05f;
+		private float _buttonWidth = 0.1f;
 		private const float _buttonSpaceing = 0.01f;
-		private const int _maxButtonsPerLine = 3;
+		private  int _maxButtonsPerLine = 3;
 		private const float _buttonZSize = 0.006f;
 		private const float _buttonTextDepth = 0.011f;
+
+		public float DefaultButtonWidth
+		{
+			get { return _buttonWidth; }
+			set { _buttonWidth = value; }
+		}
+
+		public float DefaultButtonHeight
+		{
+			get { return _buttonHeight; }
+			set { _buttonHeight = value; }
+		}
+
+		public int DefaultButtonsPerLine
+		{
+			get { return _maxButtonsPerLine; }
+			set { _maxButtonsPerLine = value; }
+		}
 
 		private int _buttonsOnCurrentLine = 0;
 		private Vector2 _nextButtonPos = new Vector2(-0.1f, 0.05f);
@@ -43,7 +61,7 @@ namespace PrimitierModdingFramework.Debugging
 			buttonCount++;
 			var button = CreateButton(	new Vector2(_buttonWidth, _buttonHeight),
 										new Vector2(_nextButtonPos.x, _nextButtonPos.y), 
-										text, Color.grey, Color.black, 0.0f, buttonCount.ToString());
+										text, Color.grey, Color.black, 0.0f, "DB"+buttonCount.ToString());
 			button.AttachOnPressListener(opPress);
 			AdvanceButtonPosition();
 			return button;
@@ -59,7 +77,7 @@ namespace PrimitierModdingFramework.Debugging
 			labelCount++;
 			var label = CreateLabel(	new Vector2(_buttonWidth, _buttonHeight),
 										new Vector2(_nextButtonPos.x, _nextButtonPos.y), 
-										text, Color.grey, Color.black, 0.0f, labelCount.ToString());
+										text, Color.grey, Color.black, 0.0f, "DL"+labelCount.ToString());
 			AdvanceButtonPosition();
 			return label;
 		}
@@ -74,7 +92,7 @@ namespace PrimitierModdingFramework.Debugging
 			toggleCount++;
 			var button = CreateToggle(	new Vector2(_buttonWidth, _buttonHeight),
 										new Vector2(_nextButtonPos.x, _nextButtonPos.y), 
-										text, Color.black, 0.0f, initialState, toggleCount.ToString());
+										text, Color.black, 0.0f, initialState, "DT"+toggleCount.ToString());
 			button.AttachOnPressListener(opPress);
 			AdvanceButtonPosition();
 			return button;
